@@ -1,34 +1,59 @@
-# Clock needed so ROS understand's Gazebo's time
+# ============================================================
+# gz_bridge.yaml — articubot_one
+# ROS2 Jazzy + Gazebo Harmonic (Ubuntu 24.04)
+# ============================================================
+
+# Clock — Đồng bộ thời gian mô phỏng (Bắt buộc phải là /clock phía Gazebo)
 - ros_topic_name: "clock"
-  gz_topic_name: "clock"
+  gz_topic_name: "/clock"
   ros_type_name: "rosgraph_msgs/msg/Clock"
   gz_type_name: "gz.msgs.Clock"
   direction: GZ_TO_ROS
 
-# Command velocity subscribed to by DiffDrive plugin
+# cmd_vel — ROS2 → Gazebo DiffDrive plugin
 - ros_topic_name: "cmd_vel"
-  gz_topic_name: "cmd_vel"
-  ros_type_name: "geometry_msgs/msg/TwistStamped"
+  gz_topic_name: "/cmd_vel" # Giả định plugin DiffDrive của bạn cấu hình topic là /cmd_vel
+  ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
 
-# Odometry published by DiffDrive plugin
+# Odometry — Gazebo DiffDrive → ROS2
 - ros_topic_name: "odom"
-  gz_topic_name: "odom"
+  gz_topic_name: "/odom"
   ros_type_name: "nav_msgs/msg/Odometry"
   gz_type_name: "gz.msgs.Odometry"
   direction: GZ_TO_ROS
 
-# Transforms published by DiffDrive plugin
+# TF — Gazebo DiffDrive → ROS2
 - ros_topic_name: "tf"
-  gz_topic_name: "tf"
+  gz_topic_name: "/tf"
   ros_type_name: "tf2_msgs/msg/TFMessage"
   gz_type_name: "gz.msgs.Pose_V"
   direction: GZ_TO_ROS
 
-# Joint states published by JointState plugin
+# Joint States — Gazebo JointState plugin → ROS2
 - ros_topic_name: "joint_states"
-  gz_topic_name: "joint_states"
+  gz_topic_name: "/joint_state" # Topic chuẩn của Harmonic JointState publisher
   ros_type_name: "sensor_msgs/msg/JointState"
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
+
+# ============================================================
+# LIDAR 
+# ============================================================
+
+# LaserScan 2D — Dùng cho Nav2, SLAM
+- ros_topic_name: "scan"
+  gz_topic_name: "/scan" # Khớp với <topic>scan</topic> trong lidar.xacro
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+# PointCloud2 — Tạm thời vô hiệu hóa (Comment lại)
+# Vì lidar.xacro của bạn hiện tại là 2D Lidar, nó sẽ không publish PointCloudPacked. 
+# Việc mở bridge này sẽ không gây lỗi, nhưng làm tốn tài nguyên quét topic vô ích.
+# - ros_topic_name: "scan/points"
+#   gz_topic_name: "/scan/points"
+#   ros_type_name: "sensor_msgs/msg/PointCloud2"
+#   gz_type_name: "gz.msgs.PointCloudPacked"
+#   direction: GZ_TO_ROS
