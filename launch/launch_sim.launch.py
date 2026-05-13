@@ -81,6 +81,14 @@ def generate_launch_description():
         output='screen'
     )
 
+    ros_gz_image_bridge = Node(
+        package="ros_gz_image",
+        executable="image_bridge",
+        arguments=["/camera/image_raw"],
+        parameters=[{'use_sim_time': True}],
+        output='screen',
+    )
+
     # ── 6. Log Info hiển thị Terminal ─────────────────────────────────────
     log = LogInfo(msg=[
         '\n========================================\n',
@@ -99,5 +107,6 @@ def generate_launch_description():
         rsp,
         gazebo,
         spawn_entity,
-        ros_gz_bridge
+        ros_gz_bridge,
+        ros_gz_image_bridge,
     ])

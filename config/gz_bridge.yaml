@@ -57,3 +57,21 @@
 #   ros_type_name: "sensor_msgs/msg/PointCloud2"
 #   gz_type_name: "gz.msgs.PointCloudPacked"
 #   direction: GZ_TO_ROS
+
+# ============================================================
+# CAMERA 
+# ============================================================
+
+# Hình ảnh Camera — Gazebo → ROS2
+- ros_topic_name: "camera/image_raw"
+  gz_topic_name: "/camera/image_raw"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+# Thông số Camera — Gazebo → ROS2 (Cần thiết cho các thuật toán AI/CV)
+- ros_topic_name: "camera/camera_info"
+  gz_topic_name: "/camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
